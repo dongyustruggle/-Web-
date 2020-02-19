@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>查看所有订单</title>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="css/style_home.css" rel="stylesheet" type="text/css" media="all" />
+		<link href="css/home_layout.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+		<script src="js/jquery-3.3.1.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/msg_share.js"></script>
+		<script src="js/jquery.cookie.js"></script>
+		<script src="https://cdn.bootcss.com/datatables/1.10.16/js/jquery.dataTables.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic" />
+		<link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet" type="text/css" />
+		<style>
+			.content {
+			margin: 50px auto;
+			border: 1px solid #ccc;
+		}
+		.operation {
+			margin: 10px;
+		}
+		.operation>button {
+			margin: 10px;
+		}
+		#books_length {
+			float: left;
+			margin-left: 20px;
+		}
+		#books_filter {
+			float: right;
+			margin-right: 20px;
+		}
+		#books {
+			margin: 5px;
+		}
+		.center-block {
+			display: block;
+			margin: auto;
+		}
+		.label-name {
+			text-align: right;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="modal fade" id="Check" role="dialog">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<span class="modal-title">项目详情</span>
+					</div>
+					<div id="CheckModal" class="modal-body">
+						<form method="get" role="form" class="form-horizontal" id="subform_driver_apply">
+							<div class="form-group" style="display: none;">
+								<label for="Orderkey" class="col-sm-3 control-label">项目号:</label>
+								<div class="col-sm-8">
+									<input class="form-control" name="Orderkey" id="Orderkey" type="text" readonly="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Cargoname" class="col-sm-3 control-label">项目名称:</label>
+								<div class="col-sm-8">
+									<input class="form-control" id="Cargoname" type="text" readonly="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Category" class="col-sm-3 control-label">项目状态:</label>
+								<div class="col-sm-8">
+									<input class="form-control" id="Category" type="text" readonly="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Beginplace" class="col-sm-3 control-label">备注:</label>
+								<div class="col-sm-8">
+									<input class="form-control" id="Beginplace" type="text" readonly="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Endpalce" class="col-sm-3 control-label">处理人:</label>
+								<div class="col-sm-8">
+									<input class="form-control" id="Snumber" type="text" readonly="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="Endpalce" class="col-sm-3 control-label">处理时间:</label>
+								<div class="col-sm-8">
+									<input class="form-control" id="Endplace" type="text" readonly="true">
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<div class="center-block" align="center">
+							<button id="cancelAdd" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button id="Apply" type="button" class="btn btn-success" data-dismiss="modal">确认</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="banner1">
+			<div class="container">
+				<center>
+					<div class="logo">
+						<a href="jingli_main.html">Pass All<span>Boatbuilding&nbsp;&nbsp;management&nbsp;&nbsp;system</span></a>
+					</div>
+				</center>
+				<div class="navigation">
+					<nav class="navbar navbar-default">
+						<!-- Brand and toggle get grouped for better mobile display -->
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+
+						<!-- Collect the nav links, forms, and other content for toggling -->
+						<div class="collapse navbar-collapse nav-wil" id="bs-example-navbar-collapse-1">
+							<nav class="cl-effect-13" id="cl-effect-13">
+								<center>
+								<ul class="nav navbar-nav" style="display: inline-block;">
+									<li><a href="jingli_main.html">主页</a></li>
+									<li><a href="jignli_check.html" class="active">查看所有项目</a></li>
+									<li><a href="jingli_shenpi.html">待审批项目</a></li>
+									<li><a href="jingli_passed.html">待验收项目</a></li>
+									<li><a href="jingli_mailus.html">联系我们</a></li>
+								</ul>
+								</center>
+							</nav>
+						</div>
+						<!-- /.navbar-collapse -->
+					</nav>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container2">
+			<center>
+				<p style="font-size: 22px; font-family: 微软雅黑; font-weight: 900; color: #f72459; line-height: 30px;padding-top: 40px;"><span style="color: #999;">在此页面显示的是 </span> 您发布的项目</p>
+				<br />
+				<div style="width:100%">
+					<hr class="hr_style" />
+					<label class="resultstitle">项目信息</label>
+				</div>
+				<div class="form-group" style="margin-left:10px;">
+					<label class="col-sm-1 control-label label-name">项目名称：</label>
+					<div class="col-sm-1">
+						<input class="form-control" name="proname" id="proname">
+					</div>
+					<label class="col-sm-1 control-label label-name">处理人：</label>
+					<div class="col-sm-1">
+						<input class="form-control" id="snumber" name="snumber">
+					</div>
+					<label class="col-sm-1 control-label label-name">项目状态：</label>
+					<div class="col-sm-1">
+						<input class="form-control" id="state" name="state">
+					</div>
+					<label class="col-sm-1 control-label label-name">发布时间：</label>
+					<div class="col-sm-2">
+						<input type="date" id="time" class="form-control">
+					</div>
+					<button id="search" name="search">搜索</button>
+				</div>
+			</center>
+
+			<section class="content">
+				<center>
+					<div class="btn-group operation">
+						<button id="btn_add" type="button" class="btn bg-success" style="color: black;">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+						</button>
+					</div>
+				</center>
+					<div class="modal fade" id="addBook" role="dialog">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<span class="modal-title">添加项目</span>
+								</div>
+								<div id="addBookModal" class="modal-body">
+									<form method="get" role="form" class="form-horizontal" id="subform_order">
+										<div class="form-group">
+											<label for="Cargoname" class="col-sm-3 control-label">项目号:</label>
+											<div class="col-sm-8">
+												<input class="form-control" id="Pronumber" name="Pronumber" type="text">
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label label-name">项目名称:</label>
+											<div class="col-sm-8">
+												<input class="form-control" id="Proname"  name="Proname" type="text"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label label-name">备注:</label>
+											<div class="col-sm-8">
+												<input class="form-control" id="Marks" name="Marks"  type="text"/>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label label-name">最迟处理时间:</label>
+											<div class="col-sm-8">
+												<input class="form-control" id="FinishTime" name="FinishTime"  type="date"/>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<div class="center-block" align="center">
+										<button id="canceladd" type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+										<button id="submitorder" type="button" class="btn btn-success" data-dismiss="modal">提交订单</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				<table id="books" class="table table-striped table-bordered row-border hover order-column" cellspacing="0" width="100%">
+					<thead>
+						<tr>
+							<th>序号</th>
+							<th>项目号</th>
+							<th>项目名称</th>
+							<th>项目状态</th>
+							<th>项目备注</th>
+							<th>处理人</th>
+							<th>发布时间</th>
+							<th>最迟处理时间</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+					<div class="btn-group operation">
+						<button id="btn_check" type="button" class="btn bg-primary" style="color: black; display: none;">
+							<span class="glyphicon" aria-hidden="true">选择此订单</span>
+						</button>
+					</div>
+				</table>
+			</section>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var date_now = new Date();
+		//得到当前年份
+		var year = date_now.getFullYear();
+		
+		//得到当前月份
+		var month = date_now.getMonth() + 1 < 10 ? "0" + (date_now.getMonth() + 1) : (date_now.getMonth() + 1);
+		//  1：js中获取Date中的month时，会比当前月份少一个月，所以这里需要先加一
+		//  2: 判断当前月份是否小于10，如果小于，那么就在月份的前面加一个 '0' ， 如果大于，就显示当前月份
+		
+		//得到当前日子（多少号）
+		var date = date_now.getDate() < 10 ? "0" + date_now.getDate() : date_now.getDate();
+		//设置input标签的min属性
+		$("#PublishTime").attr("min", year + "-" + month + "-" + date);
+		$("#PublishTime").attr("value", year + "-" + month + "-" + date);
+		var arr = new Array(); //先声明一维
+			var pnum = Array();
+		function all() {
+			$.ajax({
+				type: "post",
+				async: false,
+				url: "http://localhost:8081/boat_jingli_check.php",
+				dataType: "json",
+				success: function(result) {
+					for (var i = 0; i < result.length; i++) { //一维长度为length
+						arr[i] = new Array(); //再声明二维
+						arr[i][0] = "";
+						arr[i][1] = result[i].Pronumberone;
+						arr[i][2] = result[i].Proname;
+						arr[i][3] = result[i].State;
+						arr[i][4] = result[i].Marks;
+						arr[i][5] = result[i].Snumber;
+						arr[i][6] = result[i].PublishTime;
+						arr[i][7] = result[i].FinishTime;
+						pnum[i] = result[i].Pronumberone;
+					}
+				}
+			})
+			var datas = JSON.stringify(pnum);
+			$.ajax({
+				type: "post",
+				async: false,
+				data: 'number=' + $.cookie('user') + '&num=' + datas,
+				url: "http://localhost:8081/boat_jingli_checkpass.php",
+				dataType: "json",
+				success: function(result) {
+					//alert("success"+JSON.stringify(result));
+				},
+				error: function(result){
+					alert("error"+JSON.stringify(result));
+				}
+			})
+			return;
+		}
+	</script>
+	<script>
+		all();
+		var data = arr;
+		var table;
+		$(function() {
+			var table = $('#books').DataTable({
+				data: data,
+				"pagingType": "full_numbers",
+				"bSort": true,
+				"language": {
+					"sProcessing": "处理中...",
+					"sLengthMenu": "显示 _MENU_ 项结果",
+					"sZeroRecords": "没有匹配结果",
+					"sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+					"sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+					"sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+					"sInfoPostFix": "",
+					"sSearch": "搜索:",
+					"sUrl": "",
+					"sEmptyTable": "表中数据为空",
+					"sLoadingRecords": "载入中...",
+					"sInfoThousands": ",",
+					"oPaginate": {
+						"sFirst": "首页",
+						"sPrevious": "上页",
+						"sNext": "下页",
+						"sLast": "末页"
+					},
+					"oAria": {
+						"sSortAscending": ": 以升序排列此列",
+						"sSortDescending": ": 以降序排列此列"
+					}
+				},
+				"columnDefs": [{
+					"searchable": false,
+					"orderable": true,
+					"targets": 0
+				}, ],
+			});
+
+			table.on('order.dt search.dt', function() {
+				table.column(0, {
+					search: 'applied',
+					order: 'applied'
+				}).nodes().each(function(cell, i) {
+					cell.innerHTML = i + 1;
+				});
+			}).draw();
+			
+			$('#books tbody').on('click', 'tr', function() {
+				if ($(this).hasClass('selected')) {
+					$(this).removeClass('selected');
+				} else {
+					table.$('tr.selected').removeClass('selected');
+					$(this).addClass('selected');
+					document.getElementById("btn_check").click();
+				}
+			});
+			
+			/*$("#btn_check").click(function() {
+				$("#Check").modal()
+				var rowData = table.rows('.selected').data()[0];
+				var inputs = $("#CheckModal").find('input')
+				for (var i = 0; i < inputs.length; i++) {
+					$(inputs[i]).val(rowData[i + 1])
+				}
+			});*/
+			
+			$('#search').click(function() {
+				$.fn.dataTable.ext.search.push(
+					function(settings, data, dataIndex) {
+						var proname = $('#proname').val();
+						var snumber = $('#snumber').val();
+						var state = $('#state').val();
+						var time = $('#time').val();
+						if (proname != data[2] && proname != "") {
+							return false;
+						}
+						if (snumber != data[5] && snumber != "") {
+							return false;
+						}
+						if (state != data[3] && state != "") {
+							return false;
+						}
+						if (time != "" && time != data[6]) {
+							return false;
+						}
+						return true;
+					}
+				);
+				table.draw();
+			});
+			document.getElementById("search").click();
+			
+			$("#canceladd").on('click', function() {
+				$("#addBookModal").find('input').val('')
+			})
+			$("#submitorder").on('click', function() {
+				if ($.trim($('#Pronumber').val()).length == 0){
+					alert('项目编号没有输入！');
+				} else if (!$('#Proname').val()) {
+					alert("项目名称没有输入");
+				} else if (!$('#Marks').val()) {
+					alert("请输入项目备注");
+				} else {
+					$.ajax({
+						type: "post",
+						async: false,
+						url: "http://localhost:8081/boat_addproject.php",
+						data: $("#subform_order").serialize() + '&' + 'Numbers=' + $.cookie('user') + '&' + 'Publishtime=' + year + "-" + month + "-" + date,
+						dataType: "json",
+						success: function(result) {
+							alert("订单提交成功，我们将在3个工作日内对您的订单进行审核\n注意：审核通过的订单不可更改！");
+						},
+						error: function(result){
+							//alert("数据提交失败");
+						}
+					})
+					location.reload();
+					$("#addBookModal").find('input').val('')
+				}
+			})
+			
+			$("#btn_add").click(function() {
+				$("#addBook").modal()
+			});
+		})
+	</script>
+</html>
